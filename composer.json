@@ -1,0 +1,31 @@
+{
+    "name": "lucashccosta/pkg-dev-broker",
+    "description": "Pacote com abstração dos message brokers",
+    "type": "library",
+    "authors": [
+        {
+            "name": "Lucas Costa",
+            "email": "lucas.hcruz.costa@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+          "Dev\\Broker\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "require": {
+        "php": "^8.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.5"
+    },
+    "scripts":{
+        "test": "vendor/bin/phpunit tests/",
+        "test-coverage": "XDEBUG_MODE=coverage vendor/bin/phpunit -c phpunit.xml tests"
+    }
+}
