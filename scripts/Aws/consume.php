@@ -21,9 +21,6 @@ $payload = [
 
 $sqs = BrokerFacade::buildAwsSqs($config);
 
-do {
-    $consumed = $sqs->consume();
-    var_dump($consumed);
-} while (true);
-
+$consumed = $sqs->consume();
+var_dump($consumed);
 die();

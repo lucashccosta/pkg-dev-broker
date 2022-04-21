@@ -7,7 +7,7 @@ namespace Dev\Broker\Entities;
 class Response
 {
     public function __construct(
-        protected int $statusCode,
+        protected int $statusCode = 200,
         protected array $body = [],
         protected array $headers = []
     ) {

@@ -19,13 +19,6 @@ class SqsConfig extends BaseConfig
     protected ?string $dlq;
     protected int $waitTimeToFetch;
     
-    public function __construct(array $config)
-    {
-        parent::__construct($config);
-
-        $this->build($config);
-    }
-
     public function getAccessKey(): string
     {
         return $this->accessKey;
@@ -71,7 +64,7 @@ class SqsConfig extends BaseConfig
         ];
     }
 
-    private function build(array $config): void
+    protected function build(array $config): void
     {
         $this->accessKey = $config['access_key'];
         $this->secretKey = $config['secret_key'];

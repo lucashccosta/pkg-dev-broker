@@ -13,9 +13,11 @@ abstract class BaseConfig
     public function __construct(array $config)
     {
         $this->validate($config);
+        $this->build($config);
     }
 
     protected abstract function config(): array;
+    protected abstract function build(array $config): void;
     
     private function validate(array $config): void
     {

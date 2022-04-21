@@ -13,13 +13,14 @@ interface IBroker
     /**
      * @param array $payload
      * @throws ProduceException
-     * @return Response
+     * @return null|Response
      */
-    public function produce(array $payload): Response;
+    public function produce(array $payload): ?Response;
 
     /**
+     * @param null|callable $callback
      * @throws ConsumeException
-     * @return Response
+     * @return null|Response
      */
-    public function consume(): Response;
+    public function consume(?callable $callback = null): ?Response;
 }

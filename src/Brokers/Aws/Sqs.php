@@ -21,45 +21,47 @@ class Sqs implements IBroker
         $this->build($config);
     }
 
-    public function consume(): Response
+    public function consume(?callable $callback = null): ?Response
     {
-        try {
-            $body = [];
-
-            $result = $this->client->receiveMessage([
-                'AttributeNames' => ['SentTimestamp'],
-                'MaxNumberOfMessages' => 1,
-                'MessageAttributeNames' => ['All'],
-                'QueueUrl' => $this->config->getQueue(),
-                'WaitTimeSeconds' => $this->config->getWaitTimeToFetch()
-            ]);
-
-            if (!empty($result->get('Messages'))) {
-                try {
-                    $message = current($result->get('Messages'));
-                    
-                    $this->client->deleteMessage([
-                        'QueueUrl' => $this->config->getQueue(),
-                        'ReceiptHandle' => $message['ReceiptHandle']
-                    ]);
-                } catch (Exception $e) {}
-
-                $body = ['message' => $message['Body']];
+        do {
+            try {
+                $body = [];
+    
+                $result = $this->client->receiveMessage([
+                    'AttributeNames' => ['SentTimestamp'],
+                    'MaxNumberOfMessages' => 1,
+                    'MessageAttributeNames' => ['All'],
+                    'QueueUrl' => $this->config->getQueue(),
+                    'WaitTimeSeconds' => $this->config->getWaitTimeToFetch()
+                ]);
+    
+                if (!empty($result->get('Messages'))) {
+                    try {
+                        $message = current($result->get('Messages'));
+                        
+                        $this->client->deleteMessage([
+                            'QueueUrl' => $this->config->getQueue(),
+                            'ReceiptHandle' => $message['ReceiptHandle']
+                        ]);
+                    } catch (Exception $e) {}
+    
+                    $body = ['message' => $message['Body']];
+                }
+    
+                return new Response(
+                    statusCode: (int) $result['@metadata']['statusCode'],
+                    body: $body,
+                    headers: $result['@metadata']['headers']
+                );
+            } catch (Exception $e) {
+                throw new ConsumeException(
+                    message: ConsumeException::DEFAULT_MESSAGE . ': '. $e->getMessage()
+                );
             }
-
-            return new Response(
-                statusCode: (int) $result['@metadata']['statusCode'],
-                body: $body,
-                headers: $result['@metadata']['headers']
-            );
-        } catch (Exception $e) {
-            throw new ConsumeException(
-                message: ConsumeException::DEFAULT_MESSAGE . ': '. $e->getMessage()
-            );
-        }
+        } while (true);
     }
 
-    public function produce(array $payload): Response
+    public function produce(array $payload): ?Response
     {
         try {
             $message = json_encode($payload);
