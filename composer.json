@@ -20,7 +20,8 @@
     },
     "require": {
         "php": "^8.0",
-        "aws/aws-sdk-php": "^3.219"
+        "aws/aws-sdk-php": "^3.219",
+        "php-amqplib/php-amqplib": "^3.2"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.5"
