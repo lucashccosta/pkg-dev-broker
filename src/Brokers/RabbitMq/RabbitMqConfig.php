@@ -61,10 +61,10 @@ class RabbitMqConfig extends BaseConfig
         );
 
         $this->consumer = new ConsumerConfig(
-            noLocal: $config['queue']['no_local'] ?? false,
-            noAck: $config['queue']['no_ack'] ?? true,
-            exclusive: $config['queue']['exclusive'] ?? false,
-            noWait: $config['queue']['no_wait'] ?? false
+            noLocal: $config['consumer']['no_local'] ?? false,
+            noAck: $config['consumer']['no_ack'] ?? true,
+            exclusive: $config['consumer']['exclusive'] ?? false,
+            noWait: $config['consumer']['no_wait'] ?? false
         );
     }
 }
